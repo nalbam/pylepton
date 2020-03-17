@@ -4,16 +4,16 @@ import argparse
 import cv2
 import numpy as np
 
+from pylepton.Lepton3 import Lepton3
+
 
 def parse_args():
     p = argparse.ArgumentParser(description="webcam demo")
     p.add_argument("--camera-id", type=int, default=0, help="camera id")
+    p.add_argument("--device", default="/dev/spidev0.0", help="device")
     p.add_argument("--full-screen", action="store_true", help="full screen")
-    p.add_argument("--mirror", action="store_true", help="mirror")
     p.add_argument("--width", type=int, default=0, help="width")
     p.add_argument("--height", type=int, default=0, help="height")
-    p.add_argument("--crop", action="store_true", help="crop")
-    p.add_argument("--mosaic", action="store_true", help="mosaic")
     return p.parse_args()
 
 
@@ -33,6 +33,9 @@ def main():
     print(frame_w, frame_h)
     print('Press "Esc", "q" or "Q" to exit.')
 
+    a = np.zeros((240, 320, 3), dtype=np.uint8)
+    lepton_buf = np.zeros((120, 160, 1), dtype=np.uint16)
+
     while True:
         # Grab a single frame of video
         ret, frame = cap.read()
@@ -41,27 +44,26 @@ def main():
             # Invert left and right
             frame = cv2.flip(frame, 1)
 
-        # print("Resolution: " + str(frame.shape[0]) + " x " + str(frame.shape[1]))
+        overlay = frame.copy()
 
-        if args.crop:
-            w = int(frame_w / 2)
-            x = int((frame_w - w) / 2)
-            y = int((frame_h - w) / 2)
-
-            # Crop square
-            frame = frame[y : y + w, x : x + w]
-
-        if args.mosaic:
-            rate = 8 / frame_h
-            bigg = frame_h / 8
-
-            # Resize to 8x8
-            frame = cv2.resize(frame, (0, 0), fx=rate, fy=rate)
-
-            # Resize to orignal
-            frame = cv2.resize(
-                frame, (0, 0), fx=bigg, fy=bigg, interpolation=cv2.INTER_AREA
-            )
+        try:
+            time.sleep(0.2)  # give the overlay buffers a chance to initialize
+            with Lepton3(args.device) as l:
+                last_nr = 0
+                while True:
+                    _, nr = l.capture(lepton_buf)
+                    if nr == last_nr:
+                        # no need to redo this frame
+                        continue
+                    last_nr = nr
+                    cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+                    np.right_shift(lepton_buf, 8, lepton_buf)
+                    a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
+                    o.update(np.getbuffer(a))
+        except Exception:
+            traceback.print_exc()
+        finally:
+            cv2.imshow("Video", overlay)
 
         # Display the resulting image
         cv2.imshow("Video", frame)
