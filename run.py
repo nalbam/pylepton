@@ -113,7 +113,7 @@ def run():
                 _, nr = l.capture(lepton_buf)
 
                 print(nr)
-                print(len(lepton_buf))
+                print(len(lepton_buf), len(lepton_buf[0]))
 
                 # last_nr = 0
                 # while True:
