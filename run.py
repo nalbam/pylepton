@@ -5,11 +5,12 @@
   It will not work on microcontrollers running CircuitPython!
 """
 
-import os
+import cv2
 import math
-import time
 import numpy as np
+import os
 import pygame
+import time
 import time
 import traceback
 
