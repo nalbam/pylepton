@@ -108,6 +108,8 @@ class Sensor:
         for i, row in enumerate(bicubic):
             for j, pixel in enumerate(row):
                 pt1, pt2 = self.get_position(i, j)
+                print(pt1, pt2, pixel)
+
                 color = self.get_color(pixel)
 
                 cv2.rectangle(
