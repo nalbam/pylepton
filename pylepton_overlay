@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-import time
-import picamera
-import numpy as np
 import cv2
+import numpy as np
+import picamera
+import time
 import traceback
-from pylepton.Lepton3 import Lepton3
+
+from .pylepton.Lepton3 import Lepton3
 
 
 def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):

@@ -8,7 +8,7 @@ import numpy as np
 from colour import Color
 from scipy.interpolate import griddata
 
-from pylepton.Lepton3 import Lepton3
+from .pylepton.Lepton3 import Lepton3
 
 # low range of the sensor (this will be blue on the screen)
 MINTEMP = 22.0

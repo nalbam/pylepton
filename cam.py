@@ -6,7 +6,7 @@ import numpy as np
 import time
 import traceback
 
-from pylepton.Lepton3 import Lepton3
+from .pylepton.Lepton3 import Lepton3
 
 
 def parse_args():
