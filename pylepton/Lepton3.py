@@ -5,10 +5,10 @@ import ctypes
 import struct
 import time
 
-from ioctl_numbers import _IOR, _IOW
+from .ioctl_numbers import _IOR, _IOW
 from fcntl import ioctl
 
-from Lepton import Lepton
+from pylepton import Lepton
 
 SPI_IOC_MAGIC = ord("k")
 
