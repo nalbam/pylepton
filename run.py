@@ -110,23 +110,26 @@ def run():
             time.sleep(0.2)  # give the overlay buffers a chance to initialize
 
             with Lepton3(device) as l:
-                last_nr = 0
-                while True:
-                    _, nr = l.capture(lepton_buf)
-                    if nr == last_nr:
-                        # no need to redo this frame
-                        continue
-                    last_nr = nr
+                _, nr = l.capture(lepton_buf)
 
-                    print(lepton_buf)
+                print(nr)
+                print(lepton_buf)
 
-                    cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
-                    np.right_shift(lepton_buf, 8, lepton_buf)
-                    a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
+                # last_nr = 0
+                # while True:
+                #     _, nr = l.capture(lepton_buf)
+                #     if nr == last_nr:
+                #         # no need to redo this frame
+                #         continue
+                #     last_nr = nr
 
-                    print(len(a))
+                #     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+                #     np.right_shift(lepton_buf, 8, lepton_buf)
+                #     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
 
-                    # o.update(np.getbuffer(a))
+                #     print(len(a))
+
+                #     # o.update(np.getbuffer(a))
 
         except Exception:
             traceback.print_exc()
