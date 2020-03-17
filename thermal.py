@@ -31,31 +31,24 @@ def parse_args():
     return p.parse_args()
 
 
-# def draw_video(frame):
-#     # move video
-#     w = int(SCREEN_W / 4)
-#     M = [[1, 0, w], [0, 1, 0]]
-
-#     h, w = frame.shape[:2]
-#     M = np.float32(M)
-#     frame = cv2.warpAffine(frame, M, (w, h))
-
-
 class Sensor:
     def __init__(self, args, width, height):
         self.min_temp = args.min_temp
         self.max_temp = args.max_temp
 
-        self.size = [int(width / 3), int(width / 3)]
-        self.pixels = [self.size[0] / 32, self.size[1] / 32]
-        # self.start_pos = [0, int((height - self.size[1]) / 2)]
+        self.pixels = [160, 120]
         self.start_pos = [0, 0]
 
         self.colors = self.get_colors()
 
+        self.length = self.pixels[0] * self.pixels[1]
+
         # pylint: disable=invalid-slice-index
-        self.points = [(math.floor(ix / 8), (ix % 8)) for ix in range(0, 64)]
-        self.grid_x, self.grid_y = np.mgrid[0:7:32j, 0:7:32j]
+        self.points = [
+            (math.floor(ix / self.pixels[0]), (ix % self.pixels[0]))
+            for ix in range(0, self.length)
+        ]
+        self.grid_x, self.grid_y = np.mgrid[0:159:160j, 0:119:120j]
         # pylint: enable=invalid-slice-index
 
         # initialize the sensor
@@ -98,7 +91,7 @@ class Sensor:
         pixels = []
         # for row in sensor.pixels:
         #     pixels = pixels + row
-        for temp in range(0, 64):
+        for temp in range(0, self.length):
             pixels.append(self.min_temp + (temp / 8))
 
         pixels = [
@@ -152,21 +145,6 @@ def main():
         if args.mirror:
             # Invert left and right
             frame = cv2.flip(frame, 1)
-
-        # resized = cv2.resize(
-        #     frame, (int(frame_w / 4), int(frame_h / 4)), interpolation=cv2.INTER_AREA
-        # )
-        # # cv2.imshow("Video", resized)
-
-        # alpha = 0.9
-        # cv2.addWeighted(resized, alpha, frame, 1 - alpha, 0, frame)
-
-        # draw_video(frame)
-
-        # frame = cv2.resizeWindow("Video", frame_w, frame_h)
-        # resized = cv2.resize("Video", (frame_w, frame_h), interpolation=cv2.INTER_AREA)
-
-        # cv2.imshow("Video", resized)
 
         # draw tempo
         sensor.draw(frame, args.alpha)
