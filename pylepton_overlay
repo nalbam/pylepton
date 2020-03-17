@@ -21,6 +21,7 @@ def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):
         camera.vflip = flip_v
         camera.start_preview()
         camera.zoom = (0.0, 0.0, 1.0, 1.0)
+
         # Add the overlay directly into layer 3 with transparency;
         # we can omit the size parameter of add_overlay as the
         # size is the same as the camera's resolution
@@ -34,6 +35,7 @@ def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):
         )
         try:
             time.sleep(0.2)  # give the overlay buffers a chance to initialize
+
             with Lepton3(device) as l:
                 last_nr = 0
                 while True:
@@ -42,10 +44,15 @@ def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):
                         # no need to redo this frame
                         continue
                     last_nr = nr
+
                     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                     np.right_shift(lepton_buf, 8, lepton_buf)
                     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
+
                     o.update(np.getbuffer(a))
+
+            print(a)
+
         except Exception:
             traceback.print_exc()
         finally:
