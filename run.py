@@ -113,7 +113,7 @@ def run():
                 _, nr = l.capture(lepton_buf)
 
                 print(nr)
-                print(lepton_buf)
+                print(len(lepton_buf))
 
                 # last_nr = 0
                 # while True:
@@ -134,7 +134,7 @@ def run():
         except Exception:
             traceback.print_exc()
         finally:
-            print(len(a))
+            print("")
 
         # read the pixels
         pixels = []
