@@ -92,7 +92,7 @@ class Sensor:
         # for row in sensor.pixels:
         #     pixels = pixels + row
         for temp in range(0, self.length):
-            pixels.append(self.min_temp + (temp / 8))
+            pixels.append(self.min_temp + (temp / self.pixels[0]))
 
         pixels = [
             self.map_value(p, self.min_temp, self.max_temp, 0, COLORDEPTH - 1)
