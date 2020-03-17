@@ -49,13 +49,14 @@ def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):
                     np.right_shift(lepton_buf, 8, lepton_buf)
                     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
 
+                    print(a)
+
                     o.update(np.getbuffer(a))
 
             print(a)
 
         except Exception:
             traceback.print_exc()
-            exit
         finally:
             camera.remove_overlay(o)
 
