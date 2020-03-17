@@ -12,8 +12,9 @@ def parse_args():
     p.add_argument("--camera-id", type=int, default=0, help="camera id")
     p.add_argument("--device", default="/dev/spidev0.0", help="device")
     p.add_argument("--full-screen", action="store_true", help="full screen")
-    p.add_argument("--width", type=int, default=0, help="width")
+    p.add_argument("--mirror", action="store_true", help="mirror")
     p.add_argument("--height", type=int, default=0, help="height")
+    p.add_argument("--width", type=int, default=0, help="width")
     return p.parse_args()
 
 
