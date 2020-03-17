@@ -122,6 +122,8 @@ def run():
                     np.right_shift(lepton_buf, 8, lepton_buf)
                     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
 
+                    print(len(a))
+
                     # o.update(np.getbuffer(a))
 
         except Exception:
