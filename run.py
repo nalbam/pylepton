@@ -118,6 +118,8 @@ def run():
                         continue
                     last_nr = nr
 
+                    print(lepton_buf)
+
                     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                     np.right_shift(lepton_buf, 8, lepton_buf)
                     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
