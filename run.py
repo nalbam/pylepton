@@ -115,6 +115,8 @@ def run():
                 print(nr)
                 print(len(lepton_buf), len(lepton_buf[0]))
 
+                print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
+
                 # last_nr = 0
                 # while True:
                 #     _, nr = l.capture(lepton_buf)
