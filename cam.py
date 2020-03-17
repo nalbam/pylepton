@@ -3,6 +3,7 @@
 import argparse
 import cv2
 import numpy as np
+import traceback
 
 from pylepton.Lepton3 import Lepton3
 
