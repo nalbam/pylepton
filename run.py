@@ -90,7 +90,7 @@ def run():
     pygame.display.update()
 
     # let the sensor initialize
-    time.sleep(0.1)
+    # time.sleep(0.1)
 
     run = True
     while run:
@@ -105,38 +105,6 @@ def run():
 
         if run == False:
             break
-
-        try:
-            time.sleep(0.2)  # give the overlay buffers a chance to initialize
-
-            with Lepton3(device) as l:
-                _, nr = l.capture(lepton_buf)
-
-                print(nr)
-                print(len(lepton_buf), len(lepton_buf[0]))
-
-                print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
-
-                # last_nr = 0
-                # while True:
-                #     _, nr = l.capture(lepton_buf)
-                #     if nr == last_nr:
-                #         # no need to redo this frame
-                #         continue
-                #     last_nr = nr
-
-                #     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
-                #     np.right_shift(lepton_buf, 8, lepton_buf)
-                #     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
-
-                #     print(len(a))
-
-                #     # o.update(np.getbuffer(a))
-
-        except Exception:
-            traceback.print_exc()
-        finally:
-            print("")
 
         # read the pixels
         pixels = []
@@ -165,6 +133,42 @@ def run():
                         displayPixelWidth,
                     ),
                 )
+
+        try:
+            time.sleep(0.2)  # give the overlay buffers a chance to initialize
+
+            with Lepton3(device) as l:
+                _, nr = l.capture(lepton_buf)
+
+                print(nr)
+                print(len(lepton_buf), len(lepton_buf[0]))
+
+                print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
+
+                cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+
+                print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
+
+                # last_nr = 0
+                # while True:
+                #     _, nr = l.capture(lepton_buf)
+                #     if nr == last_nr:
+                #         # no need to redo this frame
+                #         continue
+                #     last_nr = nr
+
+                #     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+                #     np.right_shift(lepton_buf, 8, lepton_buf)
+                #     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
+
+                #     print(len(a))
+
+                #     # o.update(np.getbuffer(a))
+
+        except Exception:
+            traceback.print_exc()
+        finally:
+            print("")
 
         pygame.display.update()
         clock.tick(FRAME_RATE)
