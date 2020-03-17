@@ -14,7 +14,7 @@ from .pylepton.Lepton3 import Lepton3
 MINTEMP = 22.0
 
 # high range of the sensor (this will be red on the screen)
-MAXTEMP = 30.0
+MAXTEMP = 40.0
 
 # how many color values we can have
 COLORDEPTH = 1024
