@@ -8,26 +8,26 @@
 import os
 import math
 import time
-
-import busio
-import board
-
 import numpy as np
 import pygame
-
-from scipy.interpolate import griddata
+import time
+import traceback
 
 from colour import Color
 
-import adafruit_amg88xx
+from scipy.interpolate import griddata
 
+from pylepton.Lepton3 import Lepton3
+
+
+FRAME_RATE = 1
 
 # low range of the sensor (this will be blue on the screen)
 MINTEMP = 22.0
 MINCOLOR = "indigo"
 
 # high range of the sensor (this will be red on the screen)
-MAXTEMP = 30.0
+MAXTEMP = 40.0
 MAXCOLOR = "red"
 
 # how many color values we can have
@@ -47,20 +47,27 @@ def run():
     os.putenv("SDL_FBDEV", "/dev/fb1")
 
     pygame.init()
+    clock = pygame.time.Clock()
 
-    i2c_bus = busio.I2C(board.SCL, board.SDA)
+    # # initialize the sensor
+    # sensor = adafruit_amg88xx.AMG88XX(i2c_bus)
 
-    # initialize the sensor
-    sensor = adafruit_amg88xx.AMG88XX(i2c_bus)
+    device = "/dev/spidev0.0"
+
+    a = np.zeros((240, 320, 3), dtype=np.uint8)
+    lepton_buf = np.zeros((120, 160, 1), dtype=np.uint16)
+
+    pixels = [160, 120]
+    length = pixels[0] * pixels[1]
 
     # pylint: disable=invalid-slice-index
-    points = [(math.floor(ix / 8), (ix % 8)) for ix in range(0, 64)]
-    grid_x, grid_y = np.mgrid[0:7:32j, 0:7:32j]
+    points = [(math.floor(ix / pixels[1]), (ix % pixels[1])) for ix in range(0, length)]
+    grid_x, grid_y = np.mgrid[0:159:160j, 0:119:120j]
     # pylint: enable=invalid-slice-index
 
     # sensor is an 8x8 grid so lets do a square
-    width = 240
-    height = 240
+    width = pixels[0] * 4
+    height = pixels[1] * 4
 
     # the list of colors we can choose from
     colors = list(Color(MINCOLOR).range_to(Color(MAXCOLOR), COLORDEPTH))
@@ -68,17 +75,17 @@ def run():
     # create the array of colors
     colors = [(int(c.red * 255), int(c.green * 255), int(c.blue * 255)) for c in colors]
 
-    displayPixelWidth = width / 30
-    displayPixelHeight = height / 30
+    displayPixelWidth = 3
+    displayPixelHeight = 3
 
-    lcd = pygame.display.set_mode((width, height))
+    screen = pygame.display.set_mode((width, height))
 
-    lcd.fill((255, 0, 0))
+    screen.fill((255, 0, 0))
     pygame.display.update()
 
     pygame.mouse.set_visible(False)
 
-    lcd.fill((0, 0, 0))
+    screen.fill((0, 0, 0))
     pygame.display.update()
 
     # let the sensor initialize
@@ -98,10 +105,36 @@ def run():
         if run == False:
             break
 
+        try:
+            time.sleep(0.2)  # give the overlay buffers a chance to initialize
+
+            with Lepton3(device) as l:
+                last_nr = 0
+                while True:
+                    _, nr = l.capture(lepton_buf)
+                    if nr == last_nr:
+                        # no need to redo this frame
+                        continue
+                    last_nr = nr
+
+                    cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+                    np.right_shift(lepton_buf, 8, lepton_buf)
+                    a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
+
+                    # o.update(np.getbuffer(a))
+
+        except Exception:
+            traceback.print_exc()
+        finally:
+            print(len(a))
+
         # read the pixels
         pixels = []
-        for row in sensor.pixels:
-            pixels = pixels + row
+        # for row in sensor.pixels:
+        #     pixels = pixels + row
+        for temp in range(0, length):
+            pixels.append(MINTEMP + ((MAXTEMP - MINTEMP) * (temp / length)))
+
         pixels = [map_value(p, MINTEMP, MAXTEMP, 0, COLORDEPTH - 1) for p in pixels]
 
         # perform interpolation
@@ -110,8 +143,10 @@ def run():
         # draw everything
         for ix, row in enumerate(bicubic):
             for jx, pixel in enumerate(row):
+                # print(ix, jx, pixel)
+
                 pygame.draw.rect(
-                    lcd,
+                    screen,
                     colors[constrain(int(pixel), 0, COLORDEPTH - 1)],
                     (
                         displayPixelHeight * ix,
@@ -122,6 +157,7 @@ def run():
                 )
 
         pygame.display.update()
+        clock.tick(FRAME_RATE)
 
     pygame.quit()
 
