@@ -23,6 +23,12 @@ from pylepton.Lepton3 import Lepton3
 from colormap import colormap
 
 
+# low range of the sensor
+MINTEMP = 29000
+
+# high range of the sensor
+MAXTEMP = 31000
+
 FRAME_RATE = 15
 
 
@@ -105,16 +111,15 @@ def run():
                 # print(nr)
 
                 for ix, row in enumerate(lepton_buf):  # 120
-                    lepton_min = min(lepton_min, min(row))
-                    lepton_max = max(lepton_max, max(row))
-                print(lepton_min, lepton_max)
+                    for jx, pixel in enumerate(row):  # 160
+                        pixel = min(max(pixel, MINTEMP), MINTEMP)
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
 
-                for ix, row in enumerate(lepton_buf):  # 120
-                    lepton_min = min(lepton_min, min(row))
-                    lepton_max = max(lepton_max, max(row))
-                print(lepton_min, lepton_max)
+                # for ix, row in enumerate(lepton_buf):  # 120
+                #     lepton_min = min(lepton_min, min(row))
+                #     lepton_max = max(lepton_max, max(row))
+                # print(lepton_min, lepton_max)
 
                 np.right_shift(lepton_buf, 8, lepton_buf)
 
