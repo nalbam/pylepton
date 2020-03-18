@@ -120,7 +120,7 @@ def run():
         # bicubic = griddata(points, pixels, (grid_x, grid_y), method="cubic")
 
         try:
-            time.sleep(0.2)  # give the overlay buffers a chance to initialize
+            # time.sleep(0.2)  # give the overlay buffers a chance to initialize
 
             with Lepton3(device) as l:
                 _, nr = l.capture(lepton_buf)
