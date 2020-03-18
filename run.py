@@ -141,6 +141,7 @@ def run():
                     screen,
                     colors[constrain(int(pixel), 0, COLORDEPTH - 1)],
                     (
+                        # left, top, width, height
                         displayPixelWidth * ix,
                         displayPixelHeight * jx,
                         displayPixelWidth,
