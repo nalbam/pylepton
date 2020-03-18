@@ -20,6 +20,8 @@ from scipy.interpolate import griddata
 
 from pylepton.Lepton3 import Lepton3
 
+from .colormap import colormap  # 256 * 3 = 768
+
 
 FRAME_RATE = 15
 

@@ -79,7 +79,7 @@ class Lepton3(Lepton):
             ) != 0x1400:  # make sure that this is a well-formed frame, should find line 20 here
                 if debug_print:
                     print("Garbage frame number resetting...")
-                time.sleep(0.185)
+                time.sleep(0.1)
 
             start = time.time()
             Lepton.capture_segment(
