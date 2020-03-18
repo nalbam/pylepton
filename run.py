@@ -108,13 +108,15 @@ def run():
 
         try:
             with Lepton3(device) as l:
-                last_nr = 0
-                while True:
-                    _, nr = l.capture(lepton_buf)
-                    if nr == last_nr:
-                        # no need to redo this frame
-                        continue
-                    last_nr = nr
+                # last_nr = 0
+                # while True:
+                #     _, nr = l.capture(lepton_buf)
+                #     if nr == last_nr:
+                #         # no need to redo this frame
+                #         continue
+                #     last_nr = nr
+
+                _, nr = l.capture(lepton_buf)
 
                 print(nr)
                 print(len(lepton_buf), len(lepton_buf[0]))
