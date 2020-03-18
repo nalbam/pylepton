@@ -129,8 +129,6 @@ def run():
 
         except Exception:
             traceback.print_exc()
-        finally:
-            print("")
 
         # draw everything
         for ix, row in enumerate(lepton_buf):  # 120
