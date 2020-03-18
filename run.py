@@ -123,8 +123,8 @@ def run():
                 # print(len(lepton_buf), len(lepton_buf[0]))
                 # print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
 
-                cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
-                np.right_shift(lepton_buf, 8, lepton_buf)
+                # cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+                # np.right_shift(lepton_buf, 8, lepton_buf)
 
                 # print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
 
