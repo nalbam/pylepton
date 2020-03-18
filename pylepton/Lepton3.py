@@ -77,8 +77,10 @@ class Lepton3(Lepton):
             if (
                 self._capture_buf[20, 0] & 0xFF0F
             ) != 0x1400:  # make sure that this is a well-formed frame, should find line 20 here
-                print("Garbage frame number resetting...")
+                if debug_print:
+                    print("Garbage frame number resetting...")
                 time.sleep(0.185)
+
             start = time.time()
             Lepton.capture_segment(
                 self._handle,
@@ -123,9 +125,11 @@ class Lepton3(Lepton):
                 )
             print("---")
 
-        print(
-            "frame processed int {0}s, {1}hz".format(end - start, 1.0 / (end - start))
-        )
+            print(
+                "frame processed int {0}s, {1}hz".format(
+                    end - start, 1.0 / (end - start)
+                )
+            )
 
         data_buffer.shape = (240, 80)
         data_buffer[:, :] = self._capture_buf[:, 2:]

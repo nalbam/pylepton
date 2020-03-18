@@ -24,11 +24,11 @@ from pylepton.Lepton3 import Lepton3
 FRAME_RATE = 15
 
 # low range of the sensor (this will be blue on the screen)
-MINTEMP = 30.0
+# MINTEMP = 30.0
 MINCOLOR = "indigo"
 
 # high range of the sensor (this will be red on the screen)
-MAXTEMP = 200.0
+# MAXTEMP = 200.0
 MAXCOLOR = "red"
 
 # how many color values we can have
