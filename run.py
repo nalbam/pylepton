@@ -112,7 +112,7 @@ def run():
 
                 for ix, row in enumerate(lepton_buf):  # 120
                     for jx, pixel in enumerate(row):  # 160
-                        pixel = min(max(pixel, MINTEMP), MINTEMP)
+                        lepton_buf[ix][jx] = min(max(pixel, MINTEMP), MINTEMP)
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
 
@@ -125,8 +125,6 @@ def run():
 
         except Exception:
             traceback.print_exc()
-
-        print("")
 
         # draw everything
         for ix, row in enumerate(lepton_buf):  # 120
