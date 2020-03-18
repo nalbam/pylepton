@@ -114,6 +114,9 @@ def run():
                     for jx, pixel in enumerate(row):  # 160
                         lepton_buf[ix][jx] = min(max(pixel, MINTEMP), MAXTEMP)
 
+                lepton_buf[0][0] = MAXTEMP
+                lepton_buf[0][1] = MINTEMP
+
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
 
                 # for ix, row in enumerate(lepton_buf):  # 120
