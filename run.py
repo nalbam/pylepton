@@ -20,6 +20,7 @@ from scipy.interpolate import griddata
 
 from pylepton.Lepton3 import Lepton3
 
+from .colormap import colormap
 
 FRAME_RATE = 15
 
@@ -102,8 +103,8 @@ def run():
         if run == False:
             break
 
-        pixel_min = float("inf")
-        pixel_max = float("-inf")
+        # pixel_min = float("inf")
+        # pixel_max = float("-inf")
 
         # read the pixels
         pixels = []
@@ -124,9 +125,9 @@ def run():
                 # print(len(lepton_buf), len(lepton_buf[0]))
                 # print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
 
-                for ix, row in enumerate(lepton_buf):
-                    pixel_min = min(pixel_min, min(row))
-                    pixel_max = max(pixel_max, max(row))
+                # for ix, row in enumerate(lepton_buf):
+                #     pixel_min = min(pixel_min, min(row))
+                #     pixel_max = max(pixel_max, max(row))
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                 np.right_shift(lepton_buf, 8, lepton_buf)
@@ -144,9 +145,16 @@ def run():
             for jx, pixel in enumerate(row):  # 160
                 # print(ix, jx, pixel)
 
+                # color = colors[constrain(int(pixel), 0, COLORDEPTH - 1)]
+                color = (
+                    colormap[pixel * 3],
+                    colormap[pixel * 3 + 1],
+                    colormap[pixel * 3 + 2],
+                )
+
                 pygame.draw.rect(
                     screen,
-                    colors[constrain(int(pixel), 0, COLORDEPTH - 1)],
+                    color,
                     (
                         # left, top, width, height
                         displayPixelWidth * jx,
@@ -156,7 +164,7 @@ def run():
                     ),
                 )
 
-        print(pixel_min, pixel_max)
+        # print(pixel_min, pixel_max)
 
         pygame.display.update()
         # clock.tick(FRAME_RATE)
