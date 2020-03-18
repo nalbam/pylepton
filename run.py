@@ -24,11 +24,9 @@ from pylepton.Lepton3 import Lepton3
 FRAME_RATE = 15
 
 # low range of the sensor (this will be blue on the screen)
-# MINTEMP = 30.0
 MINCOLOR = "indigo"
 
 # high range of the sensor (this will be red on the screen)
-# MAXTEMP = 200.0
 MAXCOLOR = "red"
 
 # how many color values we can have
@@ -129,8 +127,14 @@ def run():
         except Exception:
             traceback.print_exc()
 
+        pixel_min = float("inf")
+        pixel_max = float("-inf")
+
         # draw everything
         for ix, row in enumerate(lepton_buf):  # 120
+            pixel_min = min(pixel_min, min(row))
+            pixel_max = max(pixel_max, max(row))
+
             for jx, pixel in enumerate(row):  # 160
                 # print(ix, jx, pixel)
 
@@ -145,6 +149,8 @@ def run():
                         displayPixelHeight,
                     ),
                 )
+
+        print(pixel_min, pixel_max)
 
         pygame.display.update()
         # clock.tick(FRAME_RATE)
