@@ -118,14 +118,14 @@ def run():
 
                 _, nr = l.capture(lepton_buf)
 
-                print(nr)
-                print(len(lepton_buf), len(lepton_buf[0]))
-                print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
+                # print(nr)
+                # print(len(lepton_buf), len(lepton_buf[0]))
+                # print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                 np.right_shift(lepton_buf, 8, lepton_buf)
 
-                print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
+                # print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
 
         except Exception:
             traceback.print_exc()
@@ -133,8 +133,8 @@ def run():
             print("")
 
         # draw everything
-        for ix, row in enumerate(lepton_buf):
-            for jx, pixel in enumerate(row):
+        for ix, row in enumerate(lepton_buf):  # 120
+            for jx, pixel in enumerate(row):  # 160
                 # print(ix, jx, pixel)
 
                 pygame.draw.rect(
@@ -142,8 +142,8 @@ def run():
                     colors[constrain(int(pixel), 0, COLORDEPTH - 1)],
                     (
                         # left, top, width, height
-                        displayPixelWidth * ix,
-                        displayPixelHeight * jx,
+                        displayPixelWidth * jx,
+                        displayPixelHeight * ix,
                         displayPixelWidth,
                         displayPixelHeight,
                     ),
