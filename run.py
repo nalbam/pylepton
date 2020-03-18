@@ -91,6 +91,9 @@ def run():
         if run == False:
             break
 
+        lepton_min = float("inf")
+        lepton_max = float("-inf")
+
         # read the pixels
         pixels = []
 
@@ -101,11 +104,24 @@ def run():
                 # print(_)
                 # print(nr)
 
+                for ix, row in enumerate(lepton_buf):  # 120
+                    lepton_min = min(lepton_min, min(row))
+                    lepton_max = max(lepton_max, max(row))
+                print(lepton_min, lepton_max)
+
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
+
+                for ix, row in enumerate(lepton_buf):  # 120
+                    lepton_min = min(lepton_min, min(row))
+                    lepton_max = max(lepton_max, max(row))
+                print(lepton_min, lepton_max)
+
                 np.right_shift(lepton_buf, 8, lepton_buf)
 
         except Exception:
             traceback.print_exc()
+
+        print("")
 
         # draw everything
         for ix, row in enumerate(lepton_buf):  # 120
