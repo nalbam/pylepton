@@ -21,7 +21,7 @@ from scipy.interpolate import griddata
 from pylepton.Lepton3 import Lepton3
 
 
-FRAME_RATE = 1
+FRAME_RATE = 15
 
 # low range of the sensor (this will be blue on the screen)
 MINTEMP = 22.0
