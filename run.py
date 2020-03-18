@@ -99,7 +99,7 @@ def run():
                 _, nr = l.capture(lepton_buf)
 
                 print(_)
-                print(nr)
+                # print(nr)
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                 np.right_shift(lepton_buf, 8, lepton_buf)
