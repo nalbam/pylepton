@@ -77,10 +77,10 @@ def run():
 
     screen = pygame.display.set_mode((width, height))
 
-    screen.fill((255, 0, 0))
-    pygame.display.update()
+    # screen.fill((255, 0, 0))
+    # pygame.display.update()
 
-    pygame.mouse.set_visible(False)
+    # pygame.mouse.set_visible(False)
 
     screen.fill((0, 0, 0))
     pygame.display.update()
