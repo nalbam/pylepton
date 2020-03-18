@@ -8,6 +8,15 @@ import traceback
 
 from pylepton.Lepton3 import Lepton3
 
+from colormap import colormap
+
+
+# low range of the sensor
+MINTEMP = 29000
+
+# high range of the sensor
+MAXTEMP = 31000
+
 
 def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):
     # Create an array representing a 1280x720 image of
@@ -46,10 +55,14 @@ def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):
                         continue
                     last_nr = nr
 
+                    for ix, row in enumerate(lepton_buf):  # 120
+                        for jx, pixel in enumerate(row):  # 160
+                            lepton_buf[ix][jx] = min(max(pixel, MINTEMP), MAXTEMP)
+
                     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                     np.right_shift(lepton_buf, 8, lepton_buf)
-                    a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
 
+                    a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
                     o.update(np.getbuffer(a))
 
         except Exception:
