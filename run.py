@@ -108,31 +108,16 @@ def run():
 
         # read the pixels
         pixels = []
-        # for row in sensor.pixels:
-        #     pixels = pixels + row
-        for temp in range(0, length):
-            pixels.append(MINTEMP + ((MAXTEMP - MINTEMP) * (temp / length)))
 
-        pixels = [map_value(p, MINTEMP, MAXTEMP, 0, COLORDEPTH - 1) for p in pixels]
+        # # for row in sensor.pixels:
+        # #     pixels = pixels + row
+        # for temp in range(0, length):
+        #     pixels.append(MINTEMP + ((MAXTEMP - MINTEMP) * (temp / length)))
 
-        # perform interpolation
-        bicubic = griddata(points, pixels, (grid_x, grid_y), method="cubic")
+        # pixels = [map_value(p, MINTEMP, MAXTEMP, 0, COLORDEPTH - 1) for p in pixels]
 
-        # draw everything
-        for ix, row in enumerate(bicubic):
-            for jx, pixel in enumerate(row):
-                # print(ix, jx, pixel)
-
-                pygame.draw.rect(
-                    screen,
-                    colors[constrain(int(pixel), 0, COLORDEPTH - 1)],
-                    (
-                        displayPixelHeight * ix,
-                        displayPixelWidth * jx,
-                        displayPixelHeight,
-                        displayPixelWidth,
-                    ),
-                )
+        # # perform interpolation
+        # bicubic = griddata(points, pixels, (grid_x, grid_y), method="cubic")
 
         try:
             time.sleep(0.2)  # give the overlay buffers a chance to initialize
@@ -149,6 +134,7 @@ def run():
                 np.right_shift(lepton_buf, 8, lepton_buf)
 
                 print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
+                print(min(lepton_buf), max(lepton_buf))
 
                 # last_nr = 0
                 # while True:
@@ -170,6 +156,22 @@ def run():
             traceback.print_exc()
         finally:
             print("")
+
+        # draw everything
+        for ix, row in enumerate(lepton_buf):
+            for jx, pixel in enumerate(row):
+                # print(ix, jx, pixel)
+
+                pygame.draw.rect(
+                    screen,
+                    colors[constrain(int(pixel), 0, COLORDEPTH - 1)],
+                    (
+                        displayPixelHeight * ix,
+                        displayPixelWidth * jx,
+                        displayPixelHeight,
+                        displayPixelWidth,
+                    ),
+                )
 
         pygame.display.update()
         clock.tick(FRAME_RATE)
