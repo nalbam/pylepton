@@ -147,9 +147,9 @@ def run():
 
                 # color = colors[constrain(int(pixel), 0, COLORDEPTH - 1)]
                 color = (
-                    colormap[pixel * 3],
-                    colormap[pixel * 3 + 1],
-                    colormap[pixel * 3 + 2],
+                    colormap[int(pixel) * 3],
+                    colormap[int(pixel) * 3 + 1],
+                    colormap[int(pixel) * 3 + 2],
                 )
 
                 pygame.draw.rect(
