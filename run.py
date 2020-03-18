@@ -30,7 +30,7 @@ MINCOLOR = "indigo"
 MAXCOLOR = "red"
 
 # how many color values we can have
-COLORDEPTH = 1024
+COLORDEPTH = 256
 
 # some utility functions
 def constrain(val, min_val, max_val):
@@ -64,6 +64,8 @@ def run():
 
     # create the array of colors
     colors = [(int(c.red * 255), int(c.green * 255), int(c.blue * 255)) for c in colors]
+
+    print("colors", colors)
 
     displayPixelWidth = 3
     displayPixelHeight = 3
