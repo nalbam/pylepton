@@ -67,7 +67,7 @@ def run():
     # pygame
     pygame.init()
 
-    clock = pygame.time.Clock()
+    # clock = pygame.time.Clock()
 
     screen = pygame.display.set_mode((width, height))
 
@@ -121,7 +121,7 @@ def run():
                 )
 
         pygame.display.update()
-        clock.tick(FRAME_RATE)
+        # clock.tick(FRAME_RATE)
 
     pygame.quit()
 
