@@ -66,10 +66,10 @@ def run():
     # create the array of colors
     colors = [(int(c.red * 255), int(c.green * 255), int(c.blue * 255)) for c in colors]
 
-    print("colors", colors)
+    # print("colors", colors)
 
-    displayPixelWidth = 3
-    displayPixelHeight = 3
+    displayPixelWidth = 4
+    displayPixelHeight = 4
 
     # pygame
     pygame.init()
