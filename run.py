@@ -20,7 +20,7 @@ from scipy.interpolate import griddata
 
 from pylepton.Lepton3 import Lepton3
 
-from .colormap import colormap
+from colormap import colormap
 
 FRAME_RATE = 15
 
@@ -172,5 +172,4 @@ def run():
     pygame.quit()
 
 
-if __name__ == "__main__":
-    run()
+run()
