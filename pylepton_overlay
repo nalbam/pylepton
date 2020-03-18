@@ -6,7 +6,7 @@ import picamera
 import time
 import traceback
 
-from .pylepton.Lepton3 import Lepton3
+from pylepton.Lepton3 import Lepton3
 
 
 def main(flip_v=False, alpha=128, device="/dev/spidev0.0"):

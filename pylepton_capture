@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import sys
 
-from .pylepton.Lepton3 import Lepton3
+from pylepton.Lepton3 import Lepton3
 
 
 def capture(flip_v=False, device="/dev/spidev0.0"):
