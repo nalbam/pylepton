@@ -24,11 +24,11 @@ from pylepton.Lepton3 import Lepton3
 FRAME_RATE = 15
 
 # low range of the sensor (this will be blue on the screen)
-MINTEMP = 22.0
+MINTEMP = 30.0
 MINCOLOR = "indigo"
 
 # high range of the sensor (this will be red on the screen)
-MAXTEMP = 40.0
+MAXTEMP = 200.0
 MAXCOLOR = "red"
 
 # how many color values we can have
@@ -134,7 +134,7 @@ def run():
                 np.right_shift(lepton_buf, 8, lepton_buf)
 
                 print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
-                print(min(lepton_buf), max(lepton_buf))
+                # print(min(lepton_buf), max(lepton_buf))
 
                 # last_nr = 0
                 # while True:
