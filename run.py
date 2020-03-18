@@ -98,7 +98,7 @@ def run():
             with Lepton3(device) as l:
                 _, nr = l.capture(lepton_buf)
 
-                print(_)
+                # print(_)
                 # print(nr)
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
