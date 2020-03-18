@@ -45,14 +45,6 @@ def map_value(x, in_min, in_max, out_min, out_max):
 
 
 def run():
-    os.putenv("SDL_FBDEV", "/dev/fb1")
-
-    pygame.init()
-    clock = pygame.time.Clock()
-
-    # # initialize the sensor
-    # sensor = adafruit_amg88xx.AMG88XX(i2c_bus)
-
     device = "/dev/spidev0.0"
 
     a = np.zeros((240, 320, 3), dtype=np.uint8)
@@ -79,6 +71,11 @@ def run():
     displayPixelWidth = 3
     displayPixelHeight = 3
 
+    # pygame
+    pygame.init()
+
+    clock = pygame.time.Clock()
+
     screen = pygame.display.set_mode((width, height))
 
     screen.fill((255, 0, 0))
@@ -90,7 +87,7 @@ def run():
     pygame.display.update()
 
     # let the sensor initialize
-    # time.sleep(0.1)
+    time.sleep(0.1)
 
     run = True
     while run:
@@ -109,48 +106,24 @@ def run():
         # read the pixels
         pixels = []
 
-        # # for row in sensor.pixels:
-        # #     pixels = pixels + row
-        # for temp in range(0, length):
-        #     pixels.append(MINTEMP + ((MAXTEMP - MINTEMP) * (temp / length)))
-
-        # pixels = [map_value(p, MINTEMP, MAXTEMP, 0, COLORDEPTH - 1) for p in pixels]
-
-        # # perform interpolation
-        # bicubic = griddata(points, pixels, (grid_x, grid_y), method="cubic")
-
         try:
-            # time.sleep(0.2)  # give the overlay buffers a chance to initialize
-
             with Lepton3(device) as l:
-                _, nr = l.capture(lepton_buf)
+                last_nr = 0
+                while True:
+                    _, nr = l.capture(lepton_buf)
+                    if nr == last_nr:
+                        # no need to redo this frame
+                        continue
+                    last_nr = nr
 
                 print(nr)
                 print(len(lepton_buf), len(lepton_buf[0]))
-
                 print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
 
                 cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
                 np.right_shift(lepton_buf, 8, lepton_buf)
 
                 print(lepton_buf[0][0], lepton_buf[50][50], lepton_buf[100][100])
-                # print(min(lepton_buf), max(lepton_buf))
-
-                # last_nr = 0
-                # while True:
-                #     _, nr = l.capture(lepton_buf)
-                #     if nr == last_nr:
-                #         # no need to redo this frame
-                #         continue
-                #     last_nr = nr
-
-                #     cv2.normalize(lepton_buf, lepton_buf, 0, 65535, cv2.NORM_MINMAX)
-                #     np.right_shift(lepton_buf, 8, lepton_buf)
-                #     a[: lepton_buf.shape[0], : lepton_buf.shape[1], :] = lepton_buf
-
-                #     print(len(a))
-
-                #     # o.update(np.getbuffer(a))
 
         except Exception:
             traceback.print_exc()
