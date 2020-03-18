@@ -35,6 +35,15 @@ def map_value(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 
+def get_color(v):
+    i = min(255, max(0, int(v)))
+    return (
+        colormap[i * 3],
+        colormap[i * 3 + 1],
+        colormap[i * 3 + 2],
+    )
+
+
 def run():
     device = "/dev/spidev0.0"
 
@@ -98,12 +107,7 @@ def run():
         # draw everything
         for ix, row in enumerate(lepton_buf):  # 120
             for jx, pixel in enumerate(row):  # 160
-                color = (
-                    colormap[int(pixel) * 3],
-                    colormap[int(pixel) * 3 + 1],
-                    colormap[int(pixel) * 3 + 2],
-                )
-
+                color = get_color(pixel)
                 pygame.draw.rect(
                     screen,
                     color,
